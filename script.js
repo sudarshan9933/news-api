@@ -76,7 +76,7 @@ function shareArticle(url) {
             console.log('Thanks for sharing!');
         }).catch(console.error);
     } else {
-        alert('Share feature not supported on this browser. Copy the URL manually: ' + url);
+        alert('Share feature not supported on this browser. Copy the URL manually ' + url);
     }
 }
 
