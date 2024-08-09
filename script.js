@@ -38,6 +38,11 @@ menuBtn.addEventListener("click", () => {
 });
 
 function renderMain(arr) {
+    if (!Array.isArray(arr)) {
+        console.error("renderMain expects an array but got", typeof arr);
+        document.querySelector("main").innerHTML = "<p>Error: Unable to load articles.</p>";
+        return;
+    }
     if (Array.isArray(arr)) {
         let mainHTML = '';
         arr.forEach(article => {
@@ -54,6 +59,8 @@ function renderMain(arr) {
                                     <div class="desc">${article.description}</div>
                                 </a>
                                 <div class="card-actions">
+                                    <button class="share-btn" onclick="shareArticle('${encodeURIComponent(article.url)}')"><i class="fa-solid fa-share"></i> Share</button>
+                                    <button class="save-btn" onclick="saveArticle('${encodeURIComponent(article.url)}', '${encodeURIComponent(article.title)}')"><i class="fa-solid fa-bookmark"></i> Save</button>
                                     <button class="share-btn" onclick="shareArticle('${article.url}')"><i class="fa-solid fa-share"></i> Share</button>
                                     <button class="save-btn" onclick="saveArticle('${article.url}', '${article.title}')"><i class="fa-solid fa-bookmark"></i> Save</button>
                                 </div>
