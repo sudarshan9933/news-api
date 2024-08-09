@@ -61,7 +61,7 @@ function renderMain(articles) {
 }
 
 // Initial fetch and render
-fetchData("all").then(data => {
+fetchData("data").then(data => {
     if (data && data.articles) {
         renderMain(data.articles);
     } else {
