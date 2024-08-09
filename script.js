@@ -2,12 +2,32 @@ const API_KEY = "1932816420f34617b2c061162fba7fc0";
 const url = "https://newsapi.org/v2/everything?q=";
 
 async function fetchData(query) {
-    const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
-    const data = await res.json();
-    return data;
+    try {
+        const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
+        
+        if (res.status === 426) {
+            throw new Error("426 Upgrade Required: Ensure your request is being made over HTTPS.");
+        }
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+        return null;
+    }
 }
 
-fetchData("all").then(data => renderMain(data.articles));
+fetchData("all").then(data => {
+    if (data && data.articles) {
+        renderMain(data.articles);
+    } else {
+        document.querySelector("main").innerHTML = "<p>Error: Unable to load articles.</p>";
+    }
+});
 
 // Menu button functionality
 const mobilemenu = document.querySelector(".mobile");
@@ -18,7 +38,6 @@ menuBtn.addEventListener("click", () => {
 });
 
 function renderMain(arr) {
-    // Check if arr is defined and is an array
     if (Array.isArray(arr)) {
         let mainHTML = '';
         arr.forEach(article => {
@@ -57,19 +76,14 @@ const searchInput = document.getElementById("searchInput");
 searchBtn.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = await fetchData(searchInput.value);
-    if (data) renderMain(data.articles);
+    if (data && data.articles) renderMain(data.articles);
 });
 
 searchBtnMobile.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = await fetchData(searchInputMobile.value);
-    if (data) renderMain(data.articles);
+    if (data && data.articles) renderMain(data.articles);
 });
-
-async function Search(query) {
-    const data = await fetchData(query);
-    renderMain(data.articles);
-}
 
 // Share article
 function shareArticle(url) {
