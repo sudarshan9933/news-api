@@ -17,30 +17,35 @@ menuBtn.addEventListener("click", () => {
     mobilemenu.classList.toggle("hidden");
 });
 
-// Render news articles
 function renderMain(arr) {
-    let mainHTML = '';
-    arr.forEach(article => {
-        if (article.urlToImage) {
-            mainHTML += `<div class="card">
-                            <a href="${article.url}" target="_blank" rel="noopener noreferrer">
-                                <img src="${article.urlToImage}" alt="${article.title}" loading="lazy" />
-                                <h4>${article.title}</h4>
-                                <div class="publishbyDate">
-                                    <p>${article.source.name}</p>
-                                    <span>•</span>
-                                    <p>${new Date(article.publishedAt).toLocaleDateString()}</p>
+    // Check if arr is defined and is an array
+    if (Array.isArray(arr)) {
+        let mainHTML = '';
+        arr.forEach(article => {
+            if (article.urlToImage) {
+                mainHTML += `<div class="card">
+                                <a href="${article.url}" target="_blank" rel="noopener noreferrer">
+                                    <img src="${article.urlToImage}" alt="${article.title}" loading="lazy" />
+                                    <h4>${article.title}</h4>
+                                    <div class="publishbyDate">
+                                        <p>${article.source.name}</p>
+                                        <span>•</span>
+                                        <p>${new Date(article.publishedAt).toLocaleDateString()}</p>
+                                    </div>
+                                    <div class="desc">${article.description}</div>
+                                </a>
+                                <div class="card-actions">
+                                    <button class="share-btn" onclick="shareArticle('${article.url}')"><i class="fa-solid fa-share"></i> Share</button>
+                                    <button class="save-btn" onclick="saveArticle('${article.url}', '${article.title}')"><i class="fa-solid fa-bookmark"></i> Save</button>
                                 </div>
-                                <div class="desc">${article.description}</div>
-                            </a>
-                            <div class="card-actions">
-                                <button class="share-btn" onclick="shareArticle('${article.url}')"><i class="fa-solid fa-share"></i> Share</button>
-                                <button class="save-btn" onclick="saveArticle('${article.url}', '${article.title}')"><i class="fa-solid fa-bookmark"></i> Save</button>
-                            </div>
-                        </div>`;
-        }
-    });
-    document.querySelector("main").innerHTML = mainHTML;
+                            </div>`;
+            }
+        });
+        document.querySelector("main").innerHTML = mainHTML;
+    } else {
+        console.error("renderMain expects an array but got", typeof arr);
+        document.querySelector("main").innerHTML = "<p>Error: Unable to load articles.</p>";
+    }
 }
 
 // Search functionality

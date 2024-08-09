@@ -3,7 +3,3 @@
     "replace-in-file": "^8.1.0"
   }
 }
-"scripts": {
-    "build": "replace-in-file 'REPLACE_API_KEY' '$API_KEY' ./src/**/*.js && your-build-command"
-}
-
